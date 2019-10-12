@@ -3,20 +3,12 @@
 
 std::vector<int> missing_num(std::vector<int> &input)
 {
+    int index = 0;
     std::vector<int> res;
     std::vector<bool> vec(input.size(), true);
 
-    for (auto &iter : input)
-    {
-        vec[iter-1] = false;
-    }
-
-    int index = 0;
-    for (auto iter : vec)
-    {
-        if(iter) res.emplace_back(index+1);
-        index++;
-    }
+    for_each(input.begin(), input.end(), [&](int &x) mutable { vec[x-1] = false;});
+    for_each(vec.begin(), vec.end(), [&](bool x) mutable { if(x) res.emplace_back(index+1); ++index;});
 
     return res;
 }
