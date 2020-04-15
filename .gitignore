@@ -33,3 +33,6 @@
 
 #text-editor settings file
 settings.json
+
+#debug files
+*.plist
