@@ -2,8 +2,11 @@
 #include <functional>
 #include <queue>
 #include <tuple>
+#include <unordered_map>
 
 const uint32_t kaprekars_const = 6174;
+
+using umi32i8 = std::unordered_map<uint32_t, uint8_t>;
 
 std::tuple<uint32_t, uint32_t> GenerateNumber(uint32_t input) // for sorting the letters in number
 {
@@ -34,28 +37,44 @@ std::tuple<uint32_t, uint32_t> GenerateNumber(uint32_t input) // for sorting the
     return {asc, des};
 }
 
-uint16_t GenIterKaprekars(const uint32_t input, int count = 0) // check if the problem is solved
+uint16_t GenIterKaprekars(const uint32_t input, umi32i8 &memo, int count = 0) // checks first if the problem is solved
 {
-    if(input == kaprekars_const) return 0; // quick validation - return on receiving kaprekars const
+    if(input == kaprekars_const) // quick validation - return on receiving kaprekars const
+    {
+        memo[input] = 0;
+        return 0;
+    }
+    if(memo.find(input) != memo.end()) // memoization
+    {
+        return memo[input];
+    }
     
     auto [ascending_number, decending_number] = GenerateNumber(input); // get the ascending and descending number
     auto output = decending_number - ascending_number; // output stores the new value
 
-    return 1 + GenIterKaprekars(output, count+1); // call function again to check if that solves
+    if(memo.find(output) != memo.end()) // memoization
+    {
+        return memo[output];
+    }
+
+    memo[output] = 1 + GenIterKaprekars(output, memo, count+1); // call function again to check if that solves
+
+    return memo[output];
 }
 
-void display(uint32_t number) // just a helper function
+void display(uint32_t number, umi32i8 &memo)
 {
-    std::cout<<"kaprekars_const iter for "<<number<<" : "<<GenIterKaprekars(number)<<"\n";
+    std::cout<<"kaprekars_const iter for "<<number<<" : "<<GenIterKaprekars(number, memo)<<"\n";
 }
 
 int main()
 {
-    display(3);    // test case 1
-    display(34);   // test case 2
-    display(213);  // test case 3
-    display(3156); // test case 4
-    display(5345); // test case 5
-    display(6174); // test case 6
+    umi32i8 memo; // memoization 
+    display(3, memo);    // test case 1
+    display(34, memo);   // test case 2
+    display(213, memo);  // test case 3
+    display(3156, memo); // test case 4
+    display(5345, memo); // test case 5
+    display(6174, memo); // test case 6
     return 0;
 }
