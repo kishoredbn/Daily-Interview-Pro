@@ -36,3 +36,6 @@ settings.json
 
 #debug files
 *.plist
+
+#repeat folder
+repeat/*
