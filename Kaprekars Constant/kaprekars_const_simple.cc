@@ -34,14 +34,14 @@ std::tuple<uint32_t, uint32_t> GenerateNumber(uint32_t input) // for sorting the
     return {asc, des};
 }
 
-uint16_t GenIterKaprekars(const uint32_t input, int count = 0) // check if the problem is solved
+uint16_t GenIterKaprekars(const uint32_t input) // check if the problem is solved
 {
     if(input == kaprekars_const) return 0; // quick validation - return on receiving kaprekars const
     
     auto [ascending_number, decending_number] = GenerateNumber(input); // get the ascending and descending number
     auto output = decending_number - ascending_number; // output stores the new value
 
-    return 1 + GenIterKaprekars(output, count+1); // call function again to check if that solves
+    return 1 + GenIterKaprekars(output); // call function again to check if that solves
 }
 
 void display(uint32_t number) // just a helper function

@@ -37,7 +37,7 @@ std::tuple<uint32_t, uint32_t> GenerateNumber(uint32_t input) // for sorting the
     return {asc, des};
 }
 
-uint16_t GenIterKaprekars(const uint32_t input, umi32i8 &memo, int count = 0) // checks first if the problem is solved
+uint16_t GenIterKaprekars(const uint32_t input, umi32i8 &memo) // checks first if the problem is solved
 {
     if(input == kaprekars_const) // quick validation - return on receiving kaprekars const
     {
@@ -57,7 +57,7 @@ uint16_t GenIterKaprekars(const uint32_t input, umi32i8 &memo, int count = 0) //
         return memo[output];
     }
 
-    memo[output] = 1 + GenIterKaprekars(output, memo, count+1); // call function again to check if that solves
+    memo[output] = 1 + GenIterKaprekars(output, memo); // call function again to check if that solves
 
     return memo[output];
 }
