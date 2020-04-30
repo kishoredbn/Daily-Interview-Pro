@@ -12,23 +12,25 @@ vui64 GetSubarraySum(const vui64 &input, uint64_t val)
     if(input.empty()) return ret;
 
     uint64_t counter = 0, next_value = 0;
-    umui64ui64 circular_map;
+    umui64ui64 circular_map; // core DS to maintain a circular map of values from [0 to val-1]
     std::stack<uint64_t> track_entry;
-    bool bFound = false;
-    for (auto &iter : input) // O(N) where N is input vector size
-    {
-        next_value = iter;
-        circular_map[counter] = next_value;
-        track_entry.emplace(counter);
-        counter = (counter + next_value) % val;
-        if(circular_map.find(counter) != circular_map.end()) {bFound = true; break;}
+    bool b_found_subarray = false;
+    for (auto &iter : input) // O(N) where N is input vector size 
+    { // input is consisting of values we use like steps
+        next_value = iter; // store to next_value - optional
+        circular_map[counter] = next_value; // keep track of map-position and steps we are adding
+        track_entry.emplace(counter); // keep track of all the current counter to easy backtrack output
+        counter = (counter + next_value) % val; // calculate the next position based on current map-position + steps, mod by val to circle out (see image)
+        if(circular_map.find(counter) != circular_map.end()) {b_found_subarray = true; break;} // break loop if we end up in a place where we were before.
     }
 
-    while(bFound) // bounded by O(N), where N is input vector size
+    // at this point counter is storing the starting point - if we found any results
+    // check: if we found any subarray or not
+    while(b_found_subarray) // bounded by O(N), where N is input vector size
     {
         next_value = track_entry.top(); track_entry.pop();
         ret.emplace(ret.begin(), circular_map[next_value]);
-        if(counter != next_value) continue;
+        if(counter != next_value) continue; // until we see the counter in stack keep popping out of stack make part of return val
         break;
     }
 
@@ -37,7 +39,8 @@ vui64 GetSubarraySum(const vui64 &input, uint64_t val)
 
 void Display(const vui64 &input)
 {
-    for (auto &iter : input) std::cout<<iter<<", "; std::cout<<"\n";
+    if(input.empty()) std::cout<<"None\n";
+    else { for (auto &iter : input) std::cout<<iter<<", "; std::cout<<"\n"; }
 }
 
 int main()
@@ -66,6 +69,11 @@ int main()
     vui64 vec5 = {5, 15, 10};
     auto out5 = GetSubarraySum(vec5, 20);
     Display(out5);
+
+    // test case 6:
+    vui64 vec6 = {5, 10, 15};
+    auto out6 = GetSubarraySum(vec6, 20);
+    Display(out6);
 
     return 0;
 }
