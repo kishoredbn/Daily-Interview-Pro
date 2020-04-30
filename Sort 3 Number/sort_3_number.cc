@@ -15,16 +15,11 @@ void Perform3NumSort(std::vector<int> &vec)
         index++; // increment index
     }
 
-    while(counter_2) // in-place only 2's based on counter
-    {
-        counter_2--;
-        vec[next_place++] = 2;
-    }
+    // in-place only 2's based on counter
+    while(counter_2--) vec[next_place++] = 2;
 
-    while(next_place < size) // in-place only 3's for everything else
-    {
-        vec[next_place++] = 3;
-    }
+    // in-place only 3's for everything else
+    while(next_place < size) vec[next_place++] = 3;
 }
 
 void Display(const std::vector<int> &input)
