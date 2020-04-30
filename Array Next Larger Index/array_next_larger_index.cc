@@ -8,15 +8,15 @@ std::vector<int> NextLargerindices(const std::vector<int> &input)
     std::vector<int> ret(size, -1);
     if(!size) return ret;
 
-    std::stack<std::tuple<int, uint32_t>> stack; // pops elemets in ascending order ie, smaller elements first, larger element last
+    std::stack<uint32_t> stack; // pops elemets in ascending order ie, smaller elements first, larger element last
     for(uint32_t index = 0; index < size - 1; index++) // for each element in input
     {
         while(stack.size()) // check if there is any stack element
         {
-            auto temp = stack.top();
-            if(input[index] > std::get<0>(temp)) // check if currently indexed elemt is greater than top of the stack
+            auto top_index = stack.top();
+            if(input[index] > input[top_index]) // check if currently indexed elemt is greater than top of the stack
             {
-                ret[std::get<1>(temp)] = index; // if so, assign stack tops index to current index
+                ret[top_index] = index; // if so, assign stack tops index to current index
                 stack.pop(); // pop off the top & continue until stack goes empty
             }
             else // else break the loop
@@ -30,7 +30,7 @@ std::vector<int> NextLargerindices(const std::vector<int> &input)
         }
         else // else push to stack
         {
-            stack.emplace(input[index], index);
+            stack.emplace(index);
         }
     }
 
